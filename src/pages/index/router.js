@@ -99,16 +99,16 @@ router.beforeEach(async (to, from, next) => {
   if (to.path !== '/login') {
     storage.set('redirect', to.fullPath);
     storage.session('invite_uid', to.query.uid);
-    if (!to.query.cid) {
-      Vue.prototype.$dialog.alert({
-        message: '缺少城市信息',
-      });
-      return;
-    }
-    storage.session('cid', to.query.cid);
-    const url = encodeURIComponent(`${window.location.origin}/login`);
-    window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${url}&response_type=code&scope=snsapi_userinfo&state=SUCCESS#wechat_redirect`;
-    return;
+    // if (!to.query.cid) {
+    //   Vue.prototype.$dialog.alert({
+    //     message: '缺少城市信息',
+    //   });
+    //   return;
+    // }
+    // storage.session('cid', to.query.cid);
+    // const url = encodeURIComponent(`${window.location.origin}/login`);
+    // window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${url}&response_type=code&scope=snsapi_userinfo&state=SUCCESS#wechat_redirect`;
+    // return;
     // return next({ path: '/login' });
   }
   return next();

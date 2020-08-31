@@ -3,8 +3,8 @@
     <div class="title">
       {{ name }}
     </div>
-    <img src="@/assets/front/page_title.png" alt="" class="title-bg" />
-    <img src="@/assets/front/logo.png" alt="" class="logo" />
+    <!-- <img src="@/assets/front/page_title.png" alt="" class="title-bg" /> -->
+    <!-- <img src="@/assets/front/logo.png" alt="" class="logo" /> -->
     <p v-if="showTime" class="time">投票截止时间：{{ time }}</p>
   </div>
 </template>
@@ -20,8 +20,10 @@ export default {
   },
   data() {
     return {
-      name: `${storage.session('city').name}`,
-      time: storage.session('city').limit_time,
+      name: '',
+      time: '',
+      // name: `${storage.session('city').name}`,
+      // time: storage.session('city').limit_time,
     };
   },
 };

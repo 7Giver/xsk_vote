@@ -32,6 +32,7 @@ function getPages() {
 }
 
 module.exports = {
+  lintOnSave: false, //关闭eslint
   pages: getPages(),
   devServer: {
     open: true,

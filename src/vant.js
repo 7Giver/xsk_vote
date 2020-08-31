@@ -10,6 +10,9 @@ import {
   Cell,
   Uploader,
   Search,
+  Swipe,
+  SwipeItem,
+  Lazyload
 } from 'vant';
 
 Vue.use(Dialog);
@@ -21,3 +24,6 @@ Vue.use(List);
 Vue.use(Checkbox);
 Vue.use(Overlay);
 Vue.use(Icon);
+Vue.use(Swipe);
+Vue.use(SwipeItem);
+Vue.use(Lazyload);
