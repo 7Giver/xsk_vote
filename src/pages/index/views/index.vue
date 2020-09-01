@@ -6,14 +6,14 @@
       <router-link to="/rule" class="my_link">
         活动规则
       </router-link>
-      <div class="links">
+      <!-- <div class="links">
         <router-link to="/rule">
           活动详情
         </router-link>
         <router-link to="/entry">
           {{ myEntryStatus }}
         </router-link>
-      </div>
+      </div> -->
     </div>
     <!-- 中间滚动 -->
     <div class="bd">
@@ -65,6 +65,7 @@
             :class="'rank' + (i + 1)"
             @click="$router.push({ name: 'Detail', params: { id: item.id } })"
           >
+            <div class="rank_block">{{i+1}}</div>
             <div class="img-box">
               <img :src="$cdn + item.logo_url" class="logo" />
             </div>
@@ -82,8 +83,7 @@
                 信用：<span>{{ item.credit_score }}</span>
               </div>
             </div>
-            <div class="vote-btn">投票</div>
-            <div class="vote-number">+1</div>
+            <div class="vote-btn">投票<span>+1</span></div>
           </div>
         </van-list>
       </div>
@@ -189,8 +189,8 @@ export default {
     },
     getDataList() {
       // console.log(111);
+      let data = Json.dataList
       setTimeout(() => {
-        let data = Json.dataList
         this.loading = false;
         if (this.scrollData.length<21) {
           this.finished = false;
@@ -219,7 +219,7 @@ export default {
     .my_link {
       position: absolute;
       left: 0;
-      top: 35px;
+      top: 40px;
       color: #822d48;
       font-size: 14px;
       font-weight: bold;
@@ -231,7 +231,6 @@ export default {
       opacity: 0.65;
     }
     .links {
-      margin-top: 20px;
       display: flex;
       font-size: 14px;
       color: #000;
@@ -343,6 +342,7 @@ export default {
   }
   .scroll-box {
     img {
+      width: 100%;
       height: 100%;
     }
     .scroll-item {
@@ -356,15 +356,30 @@ export default {
       background: #fff;
       // background-image: url(~@/assets/front/rank_4.png);
 
-      // &.rank1 {
-      //   background-image: url(~@/assets/front/rank_1.png);
-      // }
-      // &.rank2 {
-      //   background-image: url(~@/assets/front/rank_2.png);
-      // }
-      // &.rank3 {
-      //   background-image: url(~@/assets/front/rank_3.png);
-      // }
+      &.rank1 {
+        .rank_block {
+          background: url(~@/assets/front/rank1.png) no-repeat center / 100% 100%;
+        }
+        .img-box {
+          border: 1px solid #FFE259;
+        }
+      }
+      &.rank2 {
+        .rank_block {
+          background: url(~@/assets/front/rank2.png) no-repeat center / 100% 100%;
+        }
+        .img-box {
+          border: 1px solid #C6D3E2;
+        }
+      }
+      &.rank3 {
+        .rank_block {
+          background: url(~@/assets/front/rank3.png) no-repeat center / 100% 100%;
+        }
+        .img-box {
+          border: 1px solid #F8A86E;
+        }
+      }
       // &.rank4 {
       //   background-image: url(~@/assets/front/rank_4.png);
       // }
@@ -386,22 +401,35 @@ export default {
     }
 
     .img-box {
-      margin: 0 9px;
-      width: 74px;
-      height: 74px;
+      width: 67px;
+      height: 67px;
       padding: 5px;
       text-align: center;
+      border: 1px solid #F2F4F5;
+    }
+    .rank_block {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 12px;
+      width: 28px;
+      height: 30px;
+      margin: 0 5px;
+      font-size: 12px;
+      color: #543809;
     }
     .name-box {
-      font-size: 12px;
-      height: 65px;
       flex: 1;
+      height: 65px;
+      font-size: 12px;
+      margin-left: 8px;
       color: #9A9A9A;
       .name {
         color: #1b1b1b;
         font-size: 16px;
       }
       .count {
+        letter-spacing: 1px;
         > span {
           font-size: 15px;
           font-weight: 600;
@@ -411,18 +439,18 @@ export default {
     }
     .vote-btn {
       position: absolute;
-      color: #ffffff;
-      right: 50px;
-      bottom: 13px;
-      font-weight: 600;
-    }
-    .vote-number {
-      position: absolute;
-      color: #ffffff;
-      right: 13px;
-      bottom: 14px;
+      right: 20px;
+      bottom: 22px;
+      color: rgba(255,255,255,.85);
       font-size: 12px;
-      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 5px 20px;
+      border-radius: 40px;
+      background: linear-gradient(90deg, #FE945B, #FD623C);
+      box-shadow: 0px 4px 4px 0px rgba(253, 71, 95, 0.35);
+      > span {
+        font-size: 13px;
+      }
     }
   }
 

@@ -18,19 +18,26 @@ img {
   margin-bottom: 10px;
   position: relative;
   &::before {
+    content: '';
+    display: inline-block;
     width: 3px;
     height: 100%;
-    content: '';
-    background: #f56200;
-    display: inline-block;
     margin-right: 5px;
     vertical-align: -2px;
+    background: #f56200;
   }
 
   .label {
     color: #1b1b1b;
     font-size: 14px;
     font-weight: 600;
+  }
+  
+  .must::after{
+    content: '*';
+    color: #f56200;
+    font-size: 14px;
+    margin-left: 5px;
   }
   .sub {
     color: #939393;

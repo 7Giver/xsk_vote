@@ -12,7 +12,9 @@ import {
   Search,
   Swipe,
   SwipeItem,
-  Lazyload
+  Lazyload,
+  Popup,
+  Picker
 } from 'vant';
 
 Vue.use(Dialog);
@@ -27,3 +29,5 @@ Vue.use(Icon);
 Vue.use(Swipe);
 Vue.use(SwipeItem);
 Vue.use(Lazyload);
+Vue.use(Popup);
+Vue.use(Picker);

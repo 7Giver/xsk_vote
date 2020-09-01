@@ -1,13 +1,14 @@
 <template>
   <div class="page-container">
+    <!-- <img src="@/assets/front/icon_mobanku.png" alt=""> -->
     <div v-show="pageStep == 1" class="page entry">
       <div class="form">
-        <div class="title">
+        <!-- <div class="title">
           百强优秀企业推荐
-        </div>
+        </div> -->
         <div class="input-group first">
           <div class="label-box">
-            <span class="label">公司名称</span>
+            <span class="label must">公司名称</span>
             <span class="sub">（必填）</span>
           </div>
           <div class="input-box">
@@ -21,13 +22,13 @@
         </div>
         <div class="input-group">
           <div class="label-box">
-            <span class="label">联系方式</span>
+            <span class="label must">联系方式</span>
             <span class="sub">（必填）</span>
           </div>
           <div class="input-box">
             <input
               v-model="form.contact"
-              placeholder="请输入参赛公司联系电话号码"
+              placeholder="请输入参赛公司联系号码"
               type="number"
               class="input phone"
             />
@@ -35,7 +36,7 @@
         </div>
         <div class="input-group">
           <div class="label-box">
-            <span class="label">商标（LOGO）</span>
+            <span class="label must">商标LOGO</span>
             <span class="sub">（必填）</span>
             <div class="logo-store blue" @click="handleToUpload">
               <img src="@/assets/front/icon_mobanku.png" class="icon" />
@@ -44,21 +45,22 @@
           </div>
           <div class="input-box" @click="handleToUpload">
             <div v-if="form.logo_url">
-              <img :src="$cdn + form.logo_url" class="icon-upload" />
+              <img :src="$cdn + form.logo_url" class="icon-logo" />
             </div>
             <div v-else>
               <img src="@/assets/front/entry_upload.png" class="icon-upload" />
+              <p>点击上传</p>
             </div>
           </div>
         </div>
         <div class="logo-tip">
-          <span style="color:#d30000">*</span>
+          <span style="color:#f56200">*</span>
           若公司暂无LOGO标识，可在LOGO模板库中选择公用素材
         </div>
         <div class="input-group">
           <div class="label-box">
             <span class="label">公司介绍</span>
-            <span class="sub">(可不填)</span>
+            <span class="sub">（可不填）</span>
           </div>
           <div class="input-box">
             <textarea
@@ -75,6 +77,7 @@
             <span class="blue">《用户协议与隐私政策》</span>
           </div>
         </div>
+        <div class="submit_btn">立即提交</div>
       </div>
 
       <div class="statement">
@@ -100,7 +103,7 @@
     <div v-show="pageStep == 2" class="page upload-logo">
       <div class="upload-wrapper" @click.stop>
         <div class="label-box">
-          <span class="label">商标（LOGO）</span>
+          <span class="label must">商标（LOGO）</span>
         </div>
         <div class="upload-box">
           <div v-if="!!page2_logo_url" class="preview">
@@ -201,16 +204,16 @@ export default {
     // if (hasCompany) {
     //   return;
     // }
-    const { data } = await getLogos();
-    this.logos = data;
-    const { data: status } = await userStatus();
-    console.log(status);
-    if (status.created_company) {
-      this.form = status.created_company[0];
-    }
-    this.$share({
-      link: this.$route.path,
-    });
+    // const { data } = await getLogos();
+    // this.logos = data;
+    // const { data: status } = await userStatus();
+    // console.log(status);
+    // if (status.created_company) {
+    //   this.form = status.created_company[0];
+    // }
+    // this.$share({
+    //   link: this.$route.path,
+    // });
   },
   methods: {
     handleToUpload() {
@@ -265,9 +268,9 @@ export default {
   background-size: 100% 100%;
   .form {
     min-height: 600px;
-    padding: 0 10px;
-    background: url(~@/assets/front/entry_main_bg.png) no-repeat;
-    background-size: 100% 100%;
+    padding: 10px 14px 26px;
+    background: #fff;
+    // background: url(~@/assets/front/entry_main_bg.png) no-repeat;
     .title {
       font-size: 20px;
       line-height: 46px;
@@ -277,9 +280,6 @@ export default {
     }
     .input-group {
       margin-top: 14px;
-      &.first {
-        margin-top: 27px;
-      }
     }
     .logo-store {
       width: 120px;
@@ -312,8 +312,17 @@ export default {
       textarea {
         height: 70px;
       }
-      .icon-upload {
+      .icon-logo {
         width: 110px;
+      }
+      .icon-upload {
+        width: 34px;
+        margin-top: 10px;
+      }
+      > div {
+        p {
+          color: #999;
+        }
       }
     }
     .logo-tip {
@@ -328,7 +337,17 @@ export default {
       font-size: 10px;
       color: #939393;
       text-align: center;
-      padding: 30px 0;
+      padding: 28px 0;
+    }
+    .submit_btn {
+      color: #fff;
+      text-align: center;
+      font-size: 15px;
+      line-height: 42px;
+      letter-spacing: 1px;
+      border-radius: 40px;
+      background: linear-gradient(90deg, #FE945C, #FD623C);
+      box-shadow: 1px 4px 8px 0px rgba(253, 72, 96, 0.35);
     }
   }
   .statement {

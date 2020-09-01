@@ -1,11 +1,25 @@
 <template>
   <div class="c-city-header">
-    <div class="title">
-      {{ name }}
+    <div class="picker_block">
+      <img src="@/assets/front/icon_address.png" alt="">
+      <p class="address" @click="showPicker = true">
+        <span v-if="value">{{ value + '市' }}</span>
+        <span v-else>全国</span>
+      </p>
     </div>
+    <van-popup v-model="showPicker" round position="bottom">
+      <van-picker
+        title="选择城市"
+        show-toolbar
+        :columns="columns"
+        @cancel="showPicker = false"
+        @confirm="onConfirm"
+      />
+    </van-popup>
+    <!-- <div class="title">{{ name }}</div> -->
     <!-- <img src="@/assets/front/page_title.png" alt="" class="title-bg" /> -->
     <!-- <img src="@/assets/front/logo.png" alt="" class="logo" /> -->
-    <p v-if="showTime" class="time">投票截止时间：{{ time }}</p>
+    <!-- <p v-if="showTime" class="time">投票截止时间：{{ time }}</p> -->
   </div>
 </template>
 
@@ -20,11 +34,44 @@ export default {
   },
   data() {
     return {
-      name: '',
-      time: '',
+      name: '111',
+      time: '222',
       // name: `${storage.session('city').name}`,
       // time: storage.session('city').limit_time,
+      value: '',
+      showPicker: false,
+      columns: [
+        {
+          text: '浙江',
+          children: [
+            {
+              text: '杭州',
+            },
+            {
+              text: '温州',
+            },
+          ],
+        },
+        {
+          text: '福建',
+          children: [
+            {
+              text: '福州',
+            },
+            {
+              text: '厦门',
+            },
+          ],
+        },
+      ],
     };
+  },
+  methods: {
+    onConfirm(value) {
+      console.log(value);
+      this.value = value[1];
+      this.showPicker = false;
+    },
   },
 };
 </script>
@@ -32,11 +79,34 @@ export default {
 <style lang="scss" scoped>
 .c-city-header {
   position: relative;
-  color: #272727;
-  text-align: center;
-  text-indent: 0;
-  padding: 0;
-  padding-top: 20px;
+  background: rgba(22, 18, 60, 0.8);
+  .picker_block {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 20px;
+    .address {
+      display: flex;
+      align-items: center;
+      color: #fff;
+      font-size: 12px;
+      line-height: 34px;
+      &::after {
+        content: '';
+        width: 0;
+        height: 0;
+        border-right: 4px solid transparent;
+        border-left: 4px solid transparent;
+        border-top: 8px solid #2ed2de;
+        margin-left: 5px;
+      }
+    }
+    > img {
+      width: 12px;
+      height: 16px;
+      margin-right: 8px;
+    }
+  }
   .title {
     max-width: 230px;
     margin: 0 auto 10px auto;
