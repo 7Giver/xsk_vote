@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <!-- <img src="@/assets/front/icon_mobanku.png" alt=""> -->
+    <img src="@/assets/front/entry_banner.png" alt="">
     <div v-show="pageStep == 1" class="page entry">
       <div class="form">
         <!-- <div class="title">
@@ -260,12 +260,21 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.page-container {
+  > img {
+    position: relative;
+    display: block;
+    margin-bottom: -35px;
+    z-index: -1;
+  }
+}
 .entry {
   font-size: 12px;
   min-height: 100vh;
-  padding: 20px 15px 45px 15px;
-  background: url(~@/assets/front/entry_bg.jpg) no-repeat;
-  background-size: 100% 100%;
+  padding: 0px 15px 45px;
+  background: #1D1E4E;
+  // background: url(~@/assets/front/entry_bg.jpg) no-repeat;
+  // background-size: 100% 100%;
   .form {
     min-height: 600px;
     padding: 10px 14px 26px;

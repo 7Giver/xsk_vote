@@ -52,21 +52,21 @@ export default {
   },
   data() {
     return {
-      limit_time: storage.session('city').limit_time,
+      // limit_time: storage.session('city').limit_time,
       info: {},
     };
   },
   async created() {
-    if (!this.id) {
-      return;
-    }
-    const { data } = await companyInfo(this.id);
-    this.info = data;
-    this.$share({
-      link: this.$route.path,
-      desc: `快来为${data.name}投票`,
-      imgUrl: $cdn + data.logo_url,
-    });
+    // if (!this.id) {
+    //   return;
+    // }
+    // const { data } = await companyInfo(this.id);
+    // this.info = data;
+    // this.$share({
+    //   link: this.$route.path,
+    //   desc: `快来为${data.name}投票`,
+    //   imgUrl: $cdn + data.logo_url,
+    // });
   },
   methods: {
     async handleVote() {

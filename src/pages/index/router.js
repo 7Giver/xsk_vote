@@ -95,18 +95,10 @@ router.beforeEach(async (to, from, next) => {
     return next();
   }
   /* has no token */
-  // http://test.fnlyf.com/?cid=LUffHGra&uid=54a5c439-a258-49d8-bb38-cf94841ea9e4
   if (to.path !== '/login') {
     storage.set('redirect', to.fullPath);
-    storage.session('invite_uid', to.query.uid);
-    // if (!to.query.cid) {
-    //   Vue.prototype.$dialog.alert({
-    //     message: '缺少城市信息',
-    //   });
-    //   return;
-    // }
-    // storage.session('cid', to.query.cid);
-    // const url = encodeURIComponent(`${window.location.origin}/login`);
+    const url = encodeURIComponent(`${window.location.origin}/login`);
+    // console.log(url);
     // window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${url}&response_type=code&scope=snsapi_userinfo&state=SUCCESS#wechat_redirect`;
     // return;
     // return next({ path: '/login' });

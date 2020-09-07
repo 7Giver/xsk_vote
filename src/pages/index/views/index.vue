@@ -3,7 +3,7 @@
   <div class="page home">
     <div class="hd-box">
       <CityHeader />
-      <router-link to="/rule" class="my_link">
+      <router-link to="/entry" class="my_link">
         活动规则
       </router-link>
       <!-- <div class="links">
