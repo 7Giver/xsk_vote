@@ -76,10 +76,10 @@ export default {
     };
   },
   created() {
-    this.onLoad();
-    this.$share({
-      link: this.$route.path,
-    });
+    // this.onLoad();
+    // this.$share({
+    //   link: this.$route.path,
+    // });
   },
   methods: {
     handleChangeTab(type) {

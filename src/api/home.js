@@ -58,7 +58,7 @@ service.interceptors.response.use(
         Vue.prototype.$dialog.alert({
           message: '登录遇到了一些问题, 正在尝试为您重新授权',
         });
-        window.location.href = `${baseUrl}?cid=${cid}&uid=${uid}`;
+        window.location.href = `${baseUrl}?r=api/vote/authorize`;
         return;
       }
       return Promise.reject(res || 'error');

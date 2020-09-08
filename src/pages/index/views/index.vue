@@ -90,7 +90,7 @@
     </div>
     <!-- 中间滚动end -->
     <!-- 底部固定 -->
-    <div class="footer-fix">
+    <!-- <div class="footer-fix">
       <router-link class="link-box" to="/rank">
         <img src="@/assets/front/icon_zhuli.png" class="icon" />
         <span>助力榜</span>
@@ -99,9 +99,10 @@
         <img src="@/assets/front/icon_tousu.png" class="icon" />
         <span>意见反馈</span>
       </div>
-    </div>
+    </div> -->
     <!-- 底部固定end -->
-
+    
+    <Footer />
     <ModalContact :modalshow.sync="myModalShow" />
   </div>
 </template>
@@ -109,6 +110,7 @@
 <script>
 import { companyRank } from 'api/home.js';
 import CityHeader from './c_city_header';
+import Footer from './c_footer';
 import ModalContact from './c_modal_contact';
 import lodash from 'lodash';
 import Json from '@/Json.js';
@@ -117,6 +119,7 @@ export default {
   components: {
     CityHeader,
     ModalContact,
+    Footer,
   },
   data() {
     return {

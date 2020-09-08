@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import { cityList } from 'api/home.js';
-import { APPID } from '@/config';
+import { baseUrl, baseApi } from '@/config';
 
 // hack router push callback
 const originalPush = Router.prototype.push;
@@ -70,39 +70,69 @@ const router = new Router({
   ],
 });
 
+// 测试用缓存
+let wxid = 'l279vw01';
+let userinfo = {
+  nickname: 'Heiz',
+  openid: 'oP_4_1qCYmxq8bGk_wvePMG_N8Tk',
+  headimgurl:
+    'http://thirdwx.qlogo.cn/mmopen/vi_32/XicheYZA8nMzZF3spu2iaLKxXeVKeOkGmibcxrWN5GF8uoZ5CtViaHoicx3yMghWACwkfH3NxcxJuWsWCkuJ6u9OcBw/132',
+  wxid: 'l279vw01',
+};
+storage.set('wxid', wxid);
+storage.set('userinfo', userinfo);
+
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title || '投票';
-  const hasToken = storage.get('token');
+  const hasWxid = storage.get('wxid');
+  // const hasToken = storage.get('token');
 
-  if (hasToken) {
-    if (to.path === '/login') {
-      // if is logged in, redirect to the home page
-      return next({ path: '/' });
+  /* has no wxid */
+  if (!hasWxid) {
+    console.log(to);
+    let query = to.query;
+    let route = to.path;
+    if (query.wxid) {
+      storage.set('wxid', query.wxid);
+      storage.set('userinfo', query);
+      return next();
     }
-    if (!storage.session('city')) {
-      const { data } = await cityList();
-      const [city] = data.filter(it => it.id == to.query.cid);
-      if (!city) {
-        Vue.prototype.$dialog.alert({
-          message: '没有城市信息',
-        });
-        return;
-      }
-      city.limit_time = window.moment(city.limit_time).format('lll');
-      storage.session('city', city);
-      storage.session('cid', city.id);
+    if (route === '/') {
+      window.location.href = `${baseApi}?r=api/vote/authorize`;
+    } else {
+      window.location.href = `${baseApi}?r=api/vote/authorize&path=${route}`;
     }
-    return next();
   }
+
+  // if (hasToken) {
+  //   if (to.path === '/login') {
+  //     // if is logged in, redirect to the home page
+  //     return next({ path: '/' });
+  //   }
+  //   if (!storage.session('city')) {
+  //     const { data } = await cityList();
+  //     const [city] = data.filter(it => it.id == to.query.cid);
+  //     if (!city) {
+  //       Vue.prototype.$dialog.alert({
+  //         message: '没有城市信息',
+  //       });
+  //       return;
+  //     }
+  //     city.limit_time = window.moment(city.limit_time).format('lll');
+  //     storage.session('city', city);
+  //     storage.session('cid', city.id);
+  //   }
+  //   return next();
+  // }
   /* has no token */
-  if (to.path !== '/login') {
-    storage.set('redirect', to.fullPath);
-    const url = encodeURIComponent(`${window.location.origin}/login`);
-    // console.log(url);
-    // window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${url}&response_type=code&scope=snsapi_userinfo&state=SUCCESS#wechat_redirect`;
-    // return;
-    // return next({ path: '/login' });
-  }
+  // if (to.path !== '/login') {
+  // storage.set('redirect', to.fullPath);
+  // const url = encodeURIComponent(`${window.location.origin}/login`);
+  // console.log(url);
+  // window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${url}&response_type=code&scope=snsapi_userinfo&state=SUCCESS#wechat_redirect`;
+  // return;
+  // return next({ path: '/login' });
+  // }
   return next();
 });
 
