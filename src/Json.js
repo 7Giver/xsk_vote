@@ -49,6 +49,52 @@ const dataList = [
     },
 ];
 
+const rankList = [
+    {
+        id: 11,
+        headimgurl: "image/13/13097843b3ae03e767074452b801c526.png",
+        username: "常小路",
+        invite_count: 22, //带动人数
+        vote_count: 82, //票数
+    },
+    {
+        id: 11,
+        headimgurl: "image/13/13097843b3ae03e767074452b801c526.png",
+        username: "常小路",
+        invite_count: 22, //带动人数
+        vote_count: 82, //票数
+    },
+    {
+        id: 11,
+        headimgurl: "image/13/13097843b3ae03e767074452b801c526.png",
+        username: "常小路",
+        invite_count: 22, //带动人数
+        vote_count: 82, //票数
+    },
+    {
+        id: 11,
+        headimgurl: "image/13/13097843b3ae03e767074452b801c526.png",
+        username: "常小路",
+        invite_count: 22, //带动人数
+        vote_count: 82, //票数
+    },
+    {
+        id: 11,
+        headimgurl: "image/13/13097843b3ae03e767074452b801c526.png",
+        username: "常小路",
+        invite_count: 22, //带动人数
+        vote_count: 82, //票数
+    },
+    {
+        id: 11,
+        headimgurl: "image/13/13097843b3ae03e767074452b801c526.png",
+        username: "常小路",
+        invite_count: 22, //带动人数
+        vote_count: 82, //票数
+    },
+];
+
 export default {
     dataList,
+    rankList
 };

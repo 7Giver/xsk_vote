@@ -80,15 +80,15 @@
         <div class="submit_btn">立即提交</div>
       </div>
 
-      <div class="statement">
+      <!-- <div class="statement">
         <img class="icon" src="@/assets/front/icon_jinggao.png" />
         请您详细了解活动规则介绍后报名，活动最终解释权归 主办方<span
           class="blue"
           >搜搜科技</span
         >所有，活动中涉及的奖项合排名与搜搜 科技网站无关
-      </div>
+      </div> -->
 
-      <div class="footer-fix">
+      <!-- <div class="footer-fix">
         <div class="btn kefu" @click="myModalShow = true">
           <img src="@/assets/front/icon_kefu.png" class="icon" />
           <span>咨询客服</span>
@@ -97,6 +97,10 @@
           <img src="@/assets/front/icon_baoming.png" alt="" class="icon" />
           <span>立即提交</span>
         </div>
+      </div> -->
+
+      <div class="service_block" @click="myModalShow = true">
+        <img src="@/assets/front/icon_service.png" alt="">
       </div>
     </div>
     <!-- page1---2 -->
@@ -271,7 +275,7 @@ export default {
 .entry {
   font-size: 12px;
   min-height: 100vh;
-  padding: 0px 15px 45px;
+  padding: 0px 15px 100px;
   background: #1D1E4E;
   // background: url(~@/assets/front/entry_bg.jpg) no-repeat;
   // background-size: 100% 100%;
@@ -375,7 +379,7 @@ export default {
   }
   .footer-fix {
     position: fixed;
-    bottom: 0;
+    bottom: 52px;
     left: 0;
     height: 45px;
     width: 100%;
@@ -406,13 +410,26 @@ export default {
       }
     }
   }
+  .service_block {
+    position: fixed;
+    right: 7%;
+    bottom: 30%;
+    width: 58px;
+    height: 69px;
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 .upload-logo {
   font-size: 12px;
   min-height: 100vh;
-  padding: 20px 15px 45px 15px;
-  background: url(~@/assets/front/entry_bg.jpg) no-repeat;
-  background-size: 100% 100%;
+  padding: 0 15px 45px;
+  background: #1D1E4E;
+  // background: url(~@/assets/front/entry_bg.jpg) no-repeat;
+  // background-size: 100% 100%;
   .upload-wrapper {
     min-height: 520px;
     background: #fff;
@@ -505,7 +522,7 @@ export default {
   }
   .footer-fix {
     position: fixed;
-    bottom: 0;
+    bottom: 52px;
     left: 0;
     height: 45px;
     width: 100%;

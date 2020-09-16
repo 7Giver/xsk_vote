@@ -6,7 +6,7 @@
       :key="index"
       @click="checkItem(index, item.url)"
     >
-      <img :src="item.icon" alt="" />
+      <img :src="[select == index ? item.icon_on : item.icon]" alt="" />
       <p :class="{ on: select == index }">{{ item.title }}</p>
     </div>
   </div>
@@ -15,28 +15,27 @@
 <script>
 export default {
   name: 'Footer',
-  props: {
-    select: {
-      type: Number,
-      default: 3,
-    },
-  },
+  props: {},
   data() {
     return {
+      select: 0,
       data: [
         {
           title: '首页',
           icon: require('@/assets/front/home.png'),
+          icon_on: require('@/assets/front/home_on.png'),
           url: '/',
         },
         {
           title: '助力榜',
           icon: require('@/assets/front/rank.png'),
+          icon_on: require('@/assets/front/rank_on.png'),
           url: '/rank',
         },
         {
           title: '我要报名',
           icon: require('@/assets/front/enroll.png'),
+          icon_on: require('@/assets/front/enroll_on.png'),
           url: '/entry',
         },
       ],
@@ -44,9 +43,7 @@ export default {
   },
   methods: {
     checkItem(index, url) {
-      this.$emit('change', {
-        select: index,
-      });
+      this.select = index
       this.$router.push(url);
     },
   },
@@ -65,16 +62,23 @@ export default {
   width: 100%;
   z-index: 99;
   background: #FDFDFD;
-
+  border-top: 1px solid #F0F0F0;
   .item {
     flex: 1;
     display: flex;
     align-items: center;
     flex-direction: column;
-
+    padding: 5px 0 2px;
     img {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
+    }
+    p{
+      font-size: 12px;
+      margin-top: 1px;
+      &.on {
+        font-weight: bold;
+      }
     }
   }
 }

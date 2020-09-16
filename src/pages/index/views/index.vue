@@ -102,7 +102,6 @@
     </div> -->
     <!-- 底部固定end -->
     
-    <Footer />
     <ModalContact :modalshow.sync="myModalShow" />
   </div>
 </template>
@@ -110,7 +109,6 @@
 <script>
 import { companyRank } from 'api/home.js';
 import CityHeader from './c_city_header';
-import Footer from './c_footer';
 import ModalContact from './c_modal_contact';
 import lodash from 'lodash';
 import Json from '@/Json.js';
@@ -119,7 +117,6 @@ export default {
   components: {
     CityHeader,
     ModalContact,
-    Footer,
   },
   data() {
     return {
