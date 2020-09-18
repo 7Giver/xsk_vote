@@ -83,8 +83,8 @@ export function jssdk(url) {
 
 export function cityList() {
   return service({
-    url: '/u/cityList',
-    method: 'get',
+    url: '/?r=api/index/district',
+    method: 'post',
   });
 }
 export function getLogos() {

@@ -1,24 +1,59 @@
 <template>
   <div class="page detail">
-    <div class="company-name">
-      {{ info.name }}
+    <div class="header">
+      <img class="avatar" :src="$cdn + info.logo_url" alt="">
+      <div class="name">{{info.name}}</div>
+      <div class="phone">电话: {{info.contact}}</div>
+      <div class="rank">全国排名<span>78</span>位，全市排名<span>7</span>位</div>
+      <div class="fix_block">
+        <div class="number">
+          <span>编号：{{info.number}}</span>
+        </div>
+        <div class="credit">
+          <span>信用分：{{1073}}</span>
+        </div>
+      </div>
     </div>
-    <div class="limit-time">投票截止时间：{{ limit_time }}</div>
+    <!-- <div class="limit-time">投票截止时间：{{ limit_time }}</div> -->
     <div class="content">
-      <CardDetail :info="info" />
-
-      <div class="label-box">
+      <div class="support_block">
+        <div class="vote_num">当前票数<span>{{info.vote_score}}</span></div>
+        <p class="vote_diff">距离上一名还差<span>{{3084}}</span>票</p>
+        <div class="avatar_block">
+          <img src="" alt="">
+        </div>
+        <div class="vote_btn">支持TA一下</div>
+      </div>
+      <div class="group_block">
+        <div class="title_block">
+          <img src="@/assets/front/group_l.png" alt="">
+          <p>{{'中国平安事业交流群'}}</p>
+          <img src="@/assets/front/group_r.png" alt="">
+        </div>
+        <div class="content_block">
+          <img src="@/assets/front/post_text.png" alt="">
+        </div>
+      </div>
+      <div class="company_block">
+        <div class="title_block">
+          <img src="@/assets/front/company_l.png" alt="">
+          <p>公司介绍</p>
+          <img src="@/assets/front/company_r.png" alt="">
+        </div>
+        <div class="detail">
+          {{ info.desc }}
+        </div>
+      </div>
+      <!-- <div class="label-box">
         <span class="label">公司介绍</span>
-      </div>
-      <div class="des">
-        {{ info.desc }}
-      </div>
+      </div> -->
     </div>
-    <div class="statement">
-      搜搜科技后台已启动防刷票监控系统 <br />
-      实时监控，确保投票数据安全、真实
+    <div class="statement">             
+      搜搜科技后台已启动防刷票监控系统实时监控<br />
+      确保投票数据安全、真实
     </div>
-    <div class="footer-fix">
+
+    <!-- <div class="footer-fix">
       <div
         class="btn haibao"
         @click="$router.push({ name: 'CreatPost', params: { id: id } })"
@@ -31,7 +66,8 @@
         <img src="@/assets/front/icon_toupiao.png" class="icon-toupiao" />
         <span class="add1">+1</span>
       </div>
-    </div>
+    </div> -->
+
   </div>
 </template>
 
@@ -52,8 +88,17 @@ export default {
   },
   data() {
     return {
+      limit_time: '',
       // limit_time: storage.session('city').limit_time,
-      info: {},
+      info: {
+        name: 'xiaobaby啊你好',
+        number: 11,
+        vote_score: 1222,
+        logo_url: 'image/13/13097843b3ae03e767074452b801c526.png',
+        contact: 13023367793,
+        website: 'http://dt.sousou.com',
+        desc: '这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅'
+      },
     };
   },
   async created() {
@@ -86,33 +131,151 @@ export default {
 <style lang="scss" scoped>
 .detail {
   font-size: 12px;
-  min-height: 100vh;
-  padding: 20px 15px 45px 15px;
-  background: url(~@/assets/front/detail_bg.jpg) no-repeat;
-  background-size: 100% 100%;
-  .company-name {
-    font-size: 18px;
-    color: #0f1315;
-    line-height: 27px;
-    // display: inline-block;
-    max-width: 204px;
-    border-radius: 20px;
-    background: linear-gradient(to top, #e0d7b5, #fefaee);
-    text-align: center;
-    margin: 10px auto 0 auto;
-    font-weight: 600;
-  }
-  .limit-time {
-    font-size: 12px;
-    color: #fff;
-    text-align: center;
-    padding: 8px 0 16px 0;
+  background: #F2F4F5;
+  .header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px 0 12px;
+    background: url(~@/assets/front/detail_bg.png) no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    .avatar {
+      display: block;
+      width:78px;
+      height: 78px;
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(198,211,226, 0.2);
+    }
+    .name {
+      color: #fff;
+      margin: 6px auto 2px;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+    .phone {
+      color: #CCCCCC;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .rank {
+      color: #F2F4F5;
+      font-size: 15px;
+      letter-spacing: 1px;
+      span {
+        color: #FD6840;
+      }
+    }
+    .fix_block {
+      position: absolute;
+      top: 28px;
+      left: 16px;
+      display: flex;
+      flex-direction: column;
+      >div {
+        span {
+          color: #0D1B3C;
+          font-size: 12px;
+          padding: 3px 8px;
+          border-radius: 2px;
+        }
+      }
+      .number {
+        margin-bottom: 8px;
+        span {
+          background: #FFF0CF;
+        }
+      }
+      .credit {
+        span {
+          background: #D8EDFE;
+        }
+      }
+    }
   }
   .content {
-    background: url(~@/assets/front/detail_content_bg.png) no-repeat;
-    background-size: 100% 100%;
-    min-height: 420px;
-    padding: 0 10px;
+    padding: 0 20px;
+    .support_block {
+      color: #0D1B3C;
+      font-size: 16px;
+      padding: 16px 0 20px;
+      text-align: center;
+      span {
+        color: #FF630E;
+        font-weight: bold;
+      }
+      .avatar_block {
+        display: flex;
+        align-items: center;
+        margin: 0.2rem auto;
+      }
+      .vote_btn {
+        width: 95%;
+        margin: 0 auto;
+        color: #fff;
+        font-size: 16px;
+        line-height: 46px;
+        font-weight: normal;
+        border-radius: 40px;
+        letter-spacing: 1px;
+        background: linear-gradient(90deg, #FE945B, #FD623C);
+        box-shadow: 0px 4px 8px 0px rgba(253, 71, 95, 0.35);
+      }
+    }
+    .group_block {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      .title_block {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: #C9B77E;
+        img {
+          display: block;
+          width: 58px;
+        }
+        p {
+          margin: 0 8px;
+          color: #fff;
+          font-size: 16px;
+          line-height: 52px;
+          letter-spacing: 1px;
+        }
+      }
+      .content_block {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 0;
+      }
+    }
+    .company_block {
+      .title_block {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          display: block;
+          width: 58px;
+        }
+        p {
+          margin: 0 8px;
+          color: #103466;
+          font-size: 16px;
+          font-weight: bold;
+          line-height: 56px;
+          letter-spacing: 1px;
+        }
+      }
+      .detail {
+        padding: 0 18px;
+        color: #0D1B3C;
+        font-size: 13px;
+      }
+    }
     .black {
       color: #2e2e2e;
     }
@@ -122,14 +285,16 @@ export default {
     }
   }
   .statement {
-    padding: 30px 0 15px 0;
-    margin: 0 auto;
+    margin: 20px auto 0;
+    padding: 8px 0;
+    color: #4D7098;
+    font-size: 12px;
     text-align: center;
-    color: #fff;
+    background: #E5F2FA;
   }
   .footer-fix {
     position: fixed;
-    bottom: 0;
+    bottom: 160px;
     left: 0;
     height: 45px;
     width: 100%;

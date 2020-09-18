@@ -3,9 +3,7 @@
   <div class="page home">
     <div class="hd-box">
       <CityHeader />
-      <router-link to="/entry" class="my_link">
-        活动规则
-      </router-link>
+      <div class="my_link" @click="showRule=true">活动规则</div>
       <!-- <div class="links">
         <router-link to="/rule">
           活动详情
@@ -83,11 +81,43 @@
                 信用：<span>{{ item.credit_score }}</span>
               </div>
             </div>
-            <div class="vote-btn">投票<span>+1</span></div>
+            <div class="vote-btn" @click.stop="showVote=true">投票<span>+1</span></div>
           </div>
         </van-list>
       </div>
     </div>
+    <!-- 活动规则弹窗 -->
+    <van-popup v-model="showRule" :style="{ width: '80%' }">
+      <div class="rule_block">
+        <div class="title">活动规则</div>
+        <div class="content">
+          <div class="rule_item" v-for="(item, i) in ruleList" :key="i">
+            <div class="icon_num"><span>{{i+1}}</span></div>
+            <div class="right">{{item.label}}：<span>{{item.text}}</span></div>
+          </div>
+        </div>
+      </div>
+    </van-popup>
+    <!-- 公众号弹窗 -->
+    <van-popup v-model="showOfficial" :style="{ width: '72%' }">
+      <div class="official_block">
+        <img class="title" src="@/assets/front/official_title.png" alt="">
+        <div class="content">
+          <img src="@/assets/front/more.png" alt="">
+          <p>长按识别二维码关注公众号</p>
+        </div>
+      </div>
+    </van-popup>
+    <!-- 投票弹窗 -->
+    <van-popup v-model="showVote" :style="{ width: '72%' }">
+      <div class="vote_block">
+        <img class="codeimg" src="@/assets/front/more.png" alt="">
+        <div class="btn_block">
+          <div class="cancel" @click="showVote=false">取消</div>
+          <div class="submit" @click="submit">确定</div>
+        </div>
+      </div>
+    </van-popup>
     <!-- 中间滚动end -->
     <!-- 底部固定 -->
     <!-- <div class="footer-fix">
@@ -107,7 +137,7 @@
 </template>
 
 <script>
-import { companyRank } from 'api/home.js';
+import { cityList, companyRank } from 'api/home.js';
 import CityHeader from './c_city_header';
 import ModalContact from './c_modal_contact';
 import lodash from 'lodash';
@@ -128,6 +158,9 @@ export default {
       total_row: '12',
       scrollData: [],
       myModalShow: false,
+      showRule: false, // 规则弹窗
+      showOfficial: false, //公众号弹窗
+      showVote: false, //投票弹窗
       noticList: [  //滚动公告
         {
           avatar: 'http://pw9kqbgzn.bkt.clouddn.com/image/13/13097843b3ae03e767074452b801c526.png',
@@ -142,9 +175,37 @@ export default {
           text: '刚刚美丽人生投票给回台总经理'
         },
       ],
+      ruleList: [
+        {
+          label: '活动时间',
+          text: '2020.7.1 --- 2020.8.31'
+        },
+        {
+          label: '参选要求',
+          text: '从企业经营状况、企业荣誉、品牌价值等多个维度预筛选出优质行业品牌商家参与评选。'
+        },
+        {
+          label: '公示结果',
+          text: '2020.9.1公示最终结果，并开启全国品牌商家参选活动。'
+        },
+        {
+          label: '全国结果公布',
+          text: '202011.1公示全国最终结果，并开启下届行业品牌商家百强优秀企业颁奖盛典。'
+        },
+        {
+          label: '投票规则',
+          text: '每个用户每天可投一票，可邀请伙伴一起参与投票，为品牌助力。'
+        },
+        {
+          label: '评选机构',
+          text: '由品牌企业大数据研究院联合多家评测机构和社会组织共同推出举办，助力企业品牌宣传。'
+        },
+      ]
     };
   },
   async created() {
+    // this.showOfficial = true
+    // await this.getCityList();
     this.getDataList() // 测试用数据
     // this.$share({
     //   link: this.$route.path,
@@ -187,6 +248,12 @@ export default {
       }
       console.log('bottom', this.page);
     },
+    // 获取城市列表
+    async getCityList() {
+      const { data } = await cityList();
+      console.log(data);
+      // this.tableData = data;
+    },
     getDataList() {
       // console.log(111);
       let data = Json.dataList
@@ -199,6 +266,10 @@ export default {
           this.finished = true;
         }
       }, 500)
+    },
+    // 确认投票
+    submit() {
+      this.showVote = false
     }
   },
 };
@@ -453,10 +524,111 @@ export default {
       }
     }
   }
-
+  // 弹出层
+  .van-popup {
+    background: transparent;
+    overflow: inherit;
+  }
+  .rule_block {
+    position: relative;
+    padding: 8px;
+    border-radius: 6px;
+    background: linear-gradient(0deg, #323C91, #1975B3);
+    .title {
+      position: absolute;
+      top: 13px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 54%;
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+      padding: 4px 5px;
+      letter-spacing: 1px;
+      background: url(~@/assets/front/rule_title.png) no-repeat center / 100% 100%;
+    }
+    .content {
+      padding: 42px 10px 10px;
+      border-radius: 6px;
+      background: #fff;
+      .rule_item {
+        display: flex;
+        align-items: baseline;
+        margin-bottom: 6px;
+        .icon_num {
+          color: #fff;
+          width: 24px;
+          height: 24px;
+          text-align: center;
+          border-radius: 50%;
+          background: #234BCB;
+          margin-right: 6px;
+          span {
+            margin-left: -1px;
+            font-size: 15px;
+            line-height: 24px;
+            font-style: italic;
+          }
+        }
+        .right {
+          flex: 1;
+          font-size: 15px;
+          font-weight: bold;
+          span {
+            font-size: 13px;
+            line-height: 10px;
+            font-weight: normal;
+          }
+        }
+        &:first-child {
+          .right {
+            span {
+              color: #FF7A5E;
+            }
+          }
+        }
+      }
+    }
+  }
+  .official_block {
+    background: #fff;
+    border-radius: 10px;
+    .title {
+      display: block;
+    }
+    .content {
+      padding: 15px 0 15px;
+      text-align: center;
+      p {
+        font-size: 13px;
+      }
+    }
+  }
+  .vote_block {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 40px 0;
+    background: url(~@/assets/front/vote_bg.png) no-repeat center / 100% 100%;
+    .codeimg {
+      width: 80px;
+      height: 80px;
+    }
+    .btn_block {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      >div {
+        flex: 1;
+      }
+    }
+  }
   .footer-fix {
     width: 100%;
-    bottom: 0;
+    bottom: 60px;
     height: 45px;
     background: #fff;
     position: fixed;
