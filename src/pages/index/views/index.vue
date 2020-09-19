@@ -2,7 +2,7 @@
 <template>
   <div class="page home">
     <div class="hd-box">
-      <CityHeader />
+      <CityHeader @confimCity="confimCity" />
       <div class="my_link" @click="showRule=true">活动规则</div>
       <!-- <div class="links">
         <router-link to="/rule">
@@ -54,7 +54,7 @@
           class="scroll-box"
           :finished="finished"
           finished-text="没有更多了"
-          @load="getDataList"
+          @load="getCompanyRank"
         >
           <div
             v-for="(item, i) in scrollData"
@@ -103,7 +103,7 @@
       <div class="official_block">
         <img class="title" src="@/assets/front/official_title.png" alt="">
         <div class="content">
-          <img src="@/assets/front/more.png" alt="">
+          <img class="codeimg" :src="officialCode" alt="">
           <p>长按识别二维码关注公众号</p>
         </div>
       </div>
@@ -151,12 +151,15 @@ export default {
   data() {
     return {
       myEntryStatus: '我要报名',
+      officialCode: `${$cdn}image/75/75ce3997414ed655f14fa2eb0b9fce1b.jpg`,
       loading: true,
-      searchParam: '',
       finished: false,
+      searchParam: '',
       page: 1,
       total_row: '12',
       scrollData: [],
+      province: '',
+      city: '',
       myModalShow: false,
       showRule: false, // 规则弹窗
       showOfficial: false, //公众号弹窗
@@ -204,24 +207,24 @@ export default {
     };
   },
   async created() {
-    // this.showOfficial = true
-    // await this.getCityList();
-    this.getDataList() // 测试用数据
+    // this.$nextTick(() => {
+    //   this.showOfficial = true
+    // })
+    // this.$dialog.alert({
+    //   message: '没有城市信息',
+    // });
+    await this.getCompanyRank()
+    // this.getDataList() // 测试用数据
     // this.$share({
     //   link: this.$route.path,
     // });
     // this.onLoad();
-    // const { data } = await userStatus();
-    // if (data.created_company.length) {
-    //   this.myEntryStatus = '修改报名信息';
-    //   // storage.set('hasCompany', data.created_company[0].id);
-    // }
   },
   methods: {
     debounceInput: lodash.debounce(async function() {
       this.scrollData = [];
       this.page = 1;
-      await this.onLoad();
+      await this.getCompanyRank();
     }, 1000),
     async onLoad() {
       let obj = {
@@ -248,12 +251,37 @@ export default {
       }
       console.log('bottom', this.page);
     },
-    // 获取城市列表
-    async getCityList() {
-      const { data } = await cityList();
-      console.log(data);
-      // this.tableData = data;
+    // 获取商家列表
+    async getCompanyRank() {
+      let obj = {
+        page: this.page,
+        province: this.province,
+        city: this.city,
+        keyword: this.searchParam
+      };
+      let { data } = await companyRank(obj);
+      let result = data.data
+      if (result && result.list.length) {
+        this.scrollData.push(...data.list);
+        this.loading = false;
+        if (this.scrollData.length < 20) {
+          this.finished = false;
+          this.page++;
+        } else {
+          this.finished = true;
+        }
+      } else {
+        this.finished = true
+      }
     },
+    // 子组件改变城市
+    confimCity(data) {
+      console.log(data);
+      this.province = data[0]
+      this.city = data[1]
+      this.getCompanyRank()
+    },
+    // 模拟数据
     getDataList() {
       // console.log(111);
       let data = Json.dataList
@@ -597,10 +625,17 @@ export default {
       display: block;
     }
     .content {
-      padding: 15px 0 15px;
+      padding: 18px 0 15px;
       text-align: center;
+      .codeimg {
+        width: 120px;
+        height: 120px;
+        border: 1px solid #FAE9CD;
+        border-radius: 5px;
+      }
       p {
         font-size: 13px;
+        margin-top: 5px;
       }
     }
   }

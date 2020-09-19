@@ -1,7 +1,7 @@
 <template>
   <div class="c-city-header">
     <div class="picker_block">
-      <img src="@/assets/front/icon_address.png" alt="">
+      <img src="@/assets/front/icon_address.png" alt="" />
       <p class="address" @click="showPicker = true">
         <span v-if="value">{{ value + '市' }}</span>
         <span v-else>全国</span>
@@ -24,13 +24,14 @@
 </template>
 
 <script>
+import { cityList } from 'api/home.js';
 export default {
   name: 'CityHeader',
   props: {
-    showTime: {
-      type: Boolean,
-      default: false,
-    },
+    // showTime: {
+    //   type: Boolean,
+    //   default: false,
+    // },
   },
   data() {
     return {
@@ -66,11 +67,50 @@ export default {
       ],
     };
   },
+  computed: {
+ 
+  },
+  async mounted() {
+    await this.getCityList()
+  },
   methods: {
+    // 获取城市列表
+    async getCityList() {
+      let { data } = await cityList();
+      this.columns = this.formatDate([...data.data])
+    },
+    // picker确定
     onConfirm(value) {
-      console.log(value);
       this.value = value[1];
       this.showPicker = false;
+      this.$emit('confimCity', value)
+    },
+    // 格式化数据
+    formatDate(arr) {
+      let newArr = [];
+      arr.forEach(item => {
+        newArr.push({
+          text: item.province,
+          children: [],
+        });
+      });
+      let cityArr = [];
+      let result = [];
+      arr.forEach((item, index) => {
+        cityArr.push(item.city);
+        this.$set(result, index, []);
+      });
+      cityArr.forEach((item, index) => {
+        item.forEach(v => {
+          result[index].push({
+            text: v,
+          });
+        });
+      });
+      newArr.forEach((item, index) => {
+        item.children = result[index];
+      });
+      return newArr
     },
   },
 };

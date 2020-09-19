@@ -8,6 +8,20 @@
         </div> -->
         <div class="input-group first">
           <div class="label-box">
+            <span class="label must">位置地区</span>
+            <span class="sub">（必填）</span>
+          </div>
+          <div class="input-box">
+            <input
+              v-model="address"
+              placeholder="请输入公司名称，不超过20个字符"
+              type="text"
+              class="input name"
+            />
+          </div>
+        </div>
+        <div class="input-group">
+          <div class="label-box">
             <span class="label must">公司名称</span>
             <span class="sub">（必填）</span>
           </div>
@@ -27,7 +41,7 @@
           </div>
           <div class="input-box">
             <input
-              v-model="form.contact"
+              v-model="form.mobile"
               placeholder="请输入参赛公司联系号码"
               type="number"
               class="input phone"
@@ -38,25 +52,25 @@
           <div class="label-box">
             <span class="label must">商标LOGO</span>
             <span class="sub">（必填）</span>
-            <div class="logo-store blue" @click="handleToUpload">
+            <!-- <div class="logo-store blue" @click="handleToUpload">
               <img src="@/assets/front/icon_mobanku.png" class="icon" />
               <span>LOGO模板库</span>
-            </div>
+            </div> -->
           </div>
-          <div class="input-box" @click="handleToUpload">
-            <div v-if="form.logo_url">
-              <img :src="$cdn + form.logo_url" class="icon-logo" />
+          <van-uploader class="input-box" :after-read="afterRead">
+            <div v-if="form.image">
+              <img :src="form.image" class="icon-logo" />
             </div>
             <div v-else>
               <img src="@/assets/front/entry_upload.png" class="icon-upload" />
               <p>点击上传</p>
             </div>
-          </div>
+          </van-uploader>
         </div>
-        <div class="logo-tip">
+        <!-- <div class="logo-tip">
           <span style="color:#f56200">*</span>
           若公司暂无LOGO标识，可在LOGO模板库中选择公用素材
-        </div>
+        </div> -->
         <div class="input-group">
           <div class="label-box">
             <span class="label">公司介绍</span>
@@ -64,7 +78,7 @@
           </div>
           <div class="input-box">
             <textarea
-              v-model="form.desc"
+              v-model="form.introduction"
               placeholder="请输入公司简要介绍，不超过240个字符"
               class="des"
             ></textarea>
@@ -77,7 +91,7 @@
             <span class="blue">《用户协议与隐私政策》</span>
           </div>
         </div>
-        <div class="submit_btn">立即提交</div>
+        <div class="submit_btn" @click="handleSubmit">立即提交</div>
       </div>
 
       <!-- <div class="statement">
@@ -111,7 +125,7 @@
         </div>
         <div class="upload-box">
           <div v-if="!!page2_logo_url" class="preview">
-            <img :src="$cdn + page2_logo_url" />
+            <img :src="page2_logo_url" />
           </div>
           <div v-else class="tip-box">
             <p class="big-tip">
@@ -145,10 +159,10 @@
             v-for="item in logos"
             :key="item.id"
             class="logo-box"
-            @click="page2_logo_url = item.logo_url"
+            @click="page2_logo_url = item.image"
           >
             <div class="img-box">
-              <img :src="$cdn + item.logo_url" />
+              <img :src="$cdn + item.image" />
             </div>
             <p class="text">还{{ item.total_count - item.used_count }}个可用</p>
           </div>
@@ -194,12 +208,14 @@ export default {
       checked: 1,
       logos: [],
       page2_logo_url: '',
+      address: '', //定位区域
       form: {
-        id: '',
-        desc: '',
-        logo_url: '',
-        contact: '',
         name: '',
+        mobile: '',
+        province: '',
+        city: '',
+        introduction: '',
+        image: '',
       },
     };
   },
@@ -222,27 +238,29 @@ export default {
   methods: {
     handleToUpload() {
       this.pageStep = 2;
-      this.page2_logo_url = this.form.logo_url;
+      this.page2_logo_url = this.form.image;
     },
     handleBack() {
       this.pageStep = 1;
     },
     handleClickUpload() {
       this.pageStep = 1;
-      this.form.logo_url = this.page2_logo_url;
+      this.form.image = this.page2_logo_url;
     },
     async afterRead({ file }) {
       // 此时可以自行将文件上传至服务器
-      console.log(file);
+      // console.log(file);
       const form = new FormData(); // 创建form对象
       form.append('file', file);
       const { data } = await uploadImage(form);
-      this.page2_logo_url = data.Url;
+      console.log(data);
+      this.page2_logo_url = data.data;
+      this.form.image = data.data;
     },
     async handleSubmit() {
       let res, id, message;
       const condition =
-        this.form.name && this.form.contact && this.form.logo_url;
+        this.form.name && this.form.mobile && this.form.image;
       if (!condition) {
         return this.$dialog.alert({ message: '请检查您提交数据是否完整' });
       }
@@ -292,7 +310,15 @@ export default {
       text-align: center;
     }
     .input-group {
-      margin-top: 14px;
+      margin-top: 10px;
+      .van-uploader {
+        display: flex;
+        justify-content: center;
+        /deep/.van-uploader__wrapper {
+          width: 100%;
+          display: block;
+        }
+      }
     }
     .logo-store {
       width: 120px;

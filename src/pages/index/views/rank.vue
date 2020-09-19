@@ -11,7 +11,7 @@
       >
         <span>总排行</span>
       </div>
-      <div
+      <!-- <div
         class="tab-item"
         :class="{ active: type == 'month' }"
         @click="handleChangeTab('month')"
@@ -24,7 +24,7 @@
         @click="handleChangeTab('day')"
       >
         <span>日排行</span>
-      </div>
+      </div> -->
     </div>
     <div class="scroll-list">
       <van-list

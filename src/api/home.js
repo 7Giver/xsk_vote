@@ -10,7 +10,7 @@ Vue.prototype.$http = axios;
 // create an axios instance
 const service = axios.create({
   baseURL: baseApi, // url = base api url + request url
-  withCredentials: true, // send cookies when cross-domain requests
+  withCredentials: false, // send cookies when cross-domain requests
   timeout: 5000, // request timeout
 });
 
@@ -18,20 +18,17 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // 不传递默认开启loading
-    if (!config.hideloading) {
-      // loading
-      Toast.loading({
-        forbidClick: true,
-      });
-    }
-    if (config.data && storage.session('cid')) {
-      config.data.city_id = storage.session('cid');
-    }
+    // if (!config.hideloading) {
+    //   // loading
+    //   Toast.loading({
+    //     forbidClick: true,
+    //   });
+    // }
     // console.log('req -------', config);
-    const isLogin = ['/getWxToken'].includes(config.url);
-    if (!isLogin) {
-      config.headers['token'] = storage.get('token');
-    }
+    // const isLogin = ['/getWxToken'].includes(config.url);
+    // if (!isLogin) {
+    //   config.headers['token'] = storage.get('token');
+    // }
     return config;
   },
   error => {
@@ -44,26 +41,35 @@ service.interceptors.request.use(
 // respone拦截器
 service.interceptors.response.use(
   response => {
-    Toast.clear();
-    const res = response.data;
-    if (response.status && response.status !== 200) {
-      // 网络错误
-      return Promise.reject(res || 'error');
-    } else if (res.code !== 1000) {
-      // 业务上的错误
-      if (res.code >= 2000 && res.code <= 3000) {
-        const cid = storage.session('cid');
-        const uid = storage.session('invite_uid');
-        storage.clearAll();
-        Vue.prototype.$dialog.alert({
-          message: '登录遇到了一些问题, 正在尝试为您重新授权',
-        });
-        window.location.href = `${baseUrl}?r=api/vote/authorize`;
-        return;
-      }
-      return Promise.reject(res || 'error');
+    // Toast.clear();
+    // const res = response.data;
+    // if (response.status && response.status !== 200) {
+    //   // 网络错误
+    //   return Promise.reject(res || 'error');
+    // } else if (res.code !== 1000) {
+    //   // 业务上的错误
+    //   if (res.code >= 2000 && res.code <= 3000) {
+    //     const cid = storage.session('cid');
+    //     const uid = storage.session('invite_uid');
+    //     storage.clearAll();
+    //     Vue.prototype.$dialog.alert({
+    //       message: '登录遇到了一些问题, 正在尝试为您重新授权',
+    //     });
+    //     window.location.href = `${baseUrl}?r=api/vote/authorize`;
+    //     return;
+    //   }
+    //   return Promise.reject(res || 'error');
+    // }
+    // return Promise.resolve(res);
+
+    // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
+    // 否则的话抛出错误
+    if (response.status === 200 && response.data.code === 200) {
+      return Promise.resolve(response)
+    } else {
+      Message.error(response.data.msg)
+      return Promise.reject(response)
     }
-    return Promise.resolve(res);
   },
   error => {
     console.log('request error ----------------'); // for debug
@@ -84,7 +90,8 @@ export function jssdk(url) {
 export function cityList() {
   return service({
     url: '/?r=api/index/district',
-    method: 'post',
+    method: 'get',
+    data: {},
   });
 }
 export function getLogos() {
@@ -95,7 +102,7 @@ export function getLogos() {
 }
 export function uploadImage(form) {
   return service({
-    url: '/u/uploadImg',
+    url: '/?r=api/index/upload',
     method: 'post',
     headers: { 'Content-Type': 'multipart/form-data' },
     data: form,
@@ -118,7 +125,7 @@ export function editCompany(data) {
 }
 export function createCompany(data) {
   return service({
-    url: '/u/recommendCompany',
+    url: '/?r=api/vote/company-submit',
     city: true,
     method: 'post',
     data,
@@ -132,16 +139,15 @@ export function userRank(type, page_number) {
     data: { page_size: 10, type, page_number },
   });
 }
-export function companyRank({ page = 1, company_name, number }) {
+export function companyRank({ page = 1, province, city, keyword }) {
   return service({
-    url: '/u/companyRank',
-    city: true,
+    url: '/?r=api/vote/company-list',
     method: 'post',
     data: {
-      company_name,
-      number,
-      page_number: page,
-      page_size: 10,
+      page: page,
+      province,
+      city,
+      keyword
     },
   });
 }

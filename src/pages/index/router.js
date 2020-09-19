@@ -71,25 +71,28 @@ const router = new Router({
 });
 
 // 测试用缓存
-let wxid = 'l279vw01';
-let userinfo = {
-  nickname: 'Heiz',
-  openid: 'oP_4_1qCYmxq8bGk_wvePMG_N8Tk',
-  headimgurl:
-    'http://thirdwx.qlogo.cn/mmopen/vi_32/XicheYZA8nMzZF3spu2iaLKxXeVKeOkGmibcxrWN5GF8uoZ5CtViaHoicx3yMghWACwkfH3NxcxJuWsWCkuJ6u9OcBw/132',
-  wxid: 'l279vw01',
-};
-storage.set('wxid', wxid);
-storage.set('userinfo', userinfo);
+// let wxid = 'l279vw01';
+// let userinfo = {
+//   nickname: 'Heiz',
+//   openid: 'oP_4_1qCYmxq8bGk_wvePMG_N8Tk',
+//   headimgurl:
+//     'http://thirdwx.qlogo.cn/mmopen/vi_32/XicheYZA8nMzZF3spu2iaLKxXeVKeOkGmibcxrWN5GF8uoZ5CtViaHoicx3yMghWACwkfH3NxcxJuWsWCkuJ6u9OcBw/132',
+//   wxid: 'l279vw01',
+// };
+// storage.set('wxid', wxid);
+// storage.set('userinfo', userinfo);
 
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title || '投票';
   const hasWxid = storage.get('wxid');
   // const hasToken = storage.get('token');
 
+  // console.log(to);
+  // let path = location.origin + location.pathname
+  // console.log(path);
+
   /* has no wxid */
   if (!hasWxid) {
-    console.log(to);
     let query = to.query;
     let route = to.path;
     if (query.wxid) {
@@ -97,11 +100,8 @@ router.beforeEach(async (to, from, next) => {
       storage.set('userinfo', query);
       return next();
     }
-    if (route === '/') {
-      window.location.href = `${baseApi}?r=api/vote/authorize`;
-    } else {
-      window.location.href = `${baseApi}?r=api/vote/authorize&path=${route}`;
-    }
+    let path = location.origin + location.pathname
+    window.location.href = `${baseApi}?r=api/vote/authorize&path=${path}`;
   }
 
   // if (hasToken) {
