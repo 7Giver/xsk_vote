@@ -32,7 +32,7 @@
         class="scroll-box"
         :finished="finished"
         finished-text="没有更多了"
-        @load="getDataList"
+        @load="getRankList"
       >
         <div
           v-for="(item, i) in scrollData"
@@ -43,17 +43,17 @@
         >
           <div class="rank_block">{{i+1}}</div>
           <div class="avatar-box">
-            <img :src="$cdn + item.headimgurl" class="avatar" />
+            <img :src="item.avatar" class="avatar" />
             <!-- <div class="medal"></div> -->
           </div>
           <div class="name-box">
-            <p class="name">{{ item.username }}</p>
+            <p class="name">{{ item.nickname }}</p>
             <p class="friends">
-              带了<span class="hlight">{{ item.invite_count }}</span>人为朋友助力
+              带了<span class="hlight">{{ item.shares }}</span>人为朋友助力
             </p>
           </div>
           <div class="no">
-            <p><span>{{ item.vote_count }}</span>票</p>
+            <p><span>{{ item.votes }}</span>票</p>
             <p>已投</p>
           </div>
         </div>
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { userRank } from 'api/home.js';
+import { userRank, clientRank } from 'api/home.js';
 import Json from '@/Json.js';
 export default {
   name: 'Rank',
@@ -76,8 +76,9 @@ export default {
       type: 'all',
     };
   },
-  created() {
-    this.getDataList(); // 测试用数据
+  async created() {
+    await this.getRankList()
+    // this.getDataList(); // 测试用数据
     // this.onLoad();
     // this.$share({
     //   link: this.$route.path,
@@ -101,6 +102,19 @@ export default {
       if (this.scrollData.length < data.total_row) {
         this.finished = false;
         this.page++;
+      } else {
+        this.finished = true;
+      }
+    },
+    async getRankList() {
+      let { data } = await clientRank(this.page);
+      let result = data.data
+      let total_row = result.list.length;
+      this.loading = false;
+      if (this.scrollData.length < total_row) {
+        this.finished = false;
+        this.page++;
+        this.scrollData.push(...result.list);
       } else {
         this.finished = true;
       }

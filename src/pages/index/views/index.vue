@@ -65,20 +65,20 @@
           >
             <div class="rank_block">{{i+1}}</div>
             <div class="img-box">
-              <img :src="$cdn + item.logo_url" class="logo" />
+              <img :src="item.image" class="logo" />
             </div>
             <!-- <div class="rank-num">
               {{ i + 1 }}
             </div> -->
             <div class="name-box">
               <div class="name">{{ item.name }}</div>
-              <div class="count">支持<span>{{ item.vote_score }}</span>票</div>
+              <div class="count">支持<span>{{ item.votes }}</span>票</div>
               <div class="score">
                 <!-- 编号:
                 <span class="black" style="margin-right:3%">{{
                   item.number
                 }}</span> -->
-                信用：<span>{{ item.credit_score }}</span>
+                信用：<span>{{ item.trust }}</span>
               </div>
             </div>
             <div class="vote-btn" @click.stop="showVote=true">投票<span>+1</span></div>
@@ -261,22 +261,19 @@ export default {
       };
       let { data } = await companyRank(obj);
       let result = data.data
-      if (result && result.list.length) {
-        this.scrollData.push(...data.list);
-        this.loading = false;
-        if (this.scrollData.length < 20) {
-          this.finished = false;
-          this.page++;
-        } else {
-          this.finished = true;
-        }
+      let total_row = result.list.length;
+      this.loading = false;
+      if (this.scrollData.length < total_row) {
+        this.finished = false;
+        this.page++;
+        this.scrollData.push(...result.list);
       } else {
-        this.finished = true
+        this.finished = true;
       }
     },
     // 子组件改变城市
     confimCity(data) {
-      console.log(data);
+      // console.log(data);
       this.province = data[0]
       this.city = data[1]
       this.getCompanyRank()

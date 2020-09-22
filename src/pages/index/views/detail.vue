@@ -102,9 +102,9 @@ export default {
     };
   },
   async created() {
-    // if (!this.id) {
-    //   return;
-    // }
+    if (!this.id) {
+      return;
+    }
     // const { data } = await companyInfo(this.id);
     // this.info = data;
     // this.$share({

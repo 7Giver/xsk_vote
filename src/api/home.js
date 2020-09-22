@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs'
 // import store from '@/store';
 import { Toast } from 'vant';
 // 根据环境不同引入不同api地址
@@ -67,7 +68,9 @@ service.interceptors.response.use(
     if (response.status === 200 && response.data.code === 200) {
       return Promise.resolve(response)
     } else {
-      Message.error(response.data.msg)
+      Vue.prototype.$dialog.alert({
+        message: response.data.msg,
+      })
       return Promise.reject(response)
     }
   },
@@ -111,24 +114,25 @@ export function uploadImage(form) {
 
 export function companyInfo(id) {
   return service({
-    url: '/u/companyInfo/' + id,
+    url: '/?r=api/vote/detail&id=' + id,
     method: 'get',
   });
 }
 export function editCompany(data) {
   return service({
     url: '/u/editCompany',
-    city: true,
     method: 'post',
-    data,
+    data: qs.stringify(data),
   });
 }
 export function createCompany(data) {
   return service({
     url: '/?r=api/vote/company-submit',
-    city: true,
     method: 'post',
-    data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: qs.stringify(data),
   });
 }
 export function userRank(type, page_number) {
@@ -137,6 +141,12 @@ export function userRank(type, page_number) {
     city: true,
     method: 'post',
     data: { page_size: 10, type, page_number },
+  });
+}
+export function clientRank(page) {
+  return service({
+    url: '/?r=api/vote/list&page=' + page,
+    method: 'get',
   });
 }
 export function companyRank({ page = 1, province, city, keyword }) {

@@ -12,12 +12,7 @@
             <span class="sub">（必填）</span>
           </div>
           <div class="input-box">
-            <input
-              v-model="address"
-              placeholder="请输入公司名称，不超过20个字符"
-              type="text"
-              class="input name"
-            />
+            <CityPicker @confimCity="confimCity" />
           </div>
         </div>
         <div class="input-group">
@@ -50,8 +45,8 @@
         </div>
         <div class="input-group">
           <div class="label-box">
-            <span class="label must">商标LOGO</span>
-            <span class="sub">（必填）</span>
+            <span class="label">商标LOGO</span>
+            <span class="sub">（可不填）</span>
             <!-- <div class="logo-store blue" @click="handleToUpload">
               <img src="@/assets/front/icon_mobanku.png" class="icon" />
               <span>LOGO模板库</span>
@@ -84,13 +79,13 @@
             ></textarea>
           </div>
         </div>
-        <div class="user-tip">
+        <!-- <div class="user-tip">
           <van-checkbox v-model="checked" icon-size="16px" shape="square" />
           <div style="margin-left: 5px">
             报名即代表同意
             <span class="blue">《用户协议与隐私政策》</span>
           </div>
-        </div>
+        </div> -->
         <div class="submit_btn" @click="handleSubmit">立即提交</div>
       </div>
 
@@ -113,9 +108,10 @@
         </div>
       </div> -->
 
-      <div class="service_block" @click="myModalShow = true">
+      <!-- 客服浮窗 -->
+      <!-- <div class="service_block" @click="myModalShow = true">
         <img src="@/assets/front/icon_service.png" alt="">
-      </div>
+      </div> -->
     </div>
     <!-- page1---2 -->
     <div v-show="pageStep == 2" class="page upload-logo">
@@ -188,6 +184,7 @@
 
 <script>
 import ModalContact from './c_modal_contact';
+import CityPicker from './c_city_picker';
 import {
   createCompany,
   userStatus,
@@ -200,6 +197,7 @@ export default {
   name: 'Entry',
   components: {
     ModalContact,
+    CityPicker,
   },
   data() {
     return {
@@ -210,6 +208,7 @@ export default {
       page2_logo_url: '',
       address: '', //定位区域
       form: {
+        wxid: '',
         name: '',
         mobile: '',
         province: '',
@@ -220,6 +219,11 @@ export default {
     };
   },
   async mounted() {
+    let wxid = storage.get('wxid')
+    if (wxid) {
+      this.form.wxid = wxid
+    }
+    
     // const hasCompany = storage.get('hasCompany');
     // if (hasCompany) {
     //   return;
@@ -236,6 +240,12 @@ export default {
     // });
   },
   methods: {
+    // 子组件改变城市
+    confimCity(data) {
+      // console.log(data);
+      this.form.province = data[0]
+      this.form.city = data[1]
+    },
     handleToUpload() {
       this.pageStep = 2;
       this.page2_logo_url = this.form.image;
@@ -260,7 +270,7 @@ export default {
     async handleSubmit() {
       let res, id, message;
       const condition =
-        this.form.name && this.form.mobile && this.form.image;
+        this.form.name && this.form.mobile && this.form.province && this.form.city;
       if (!condition) {
         return this.$dialog.alert({ message: '请检查您提交数据是否完整' });
       }
@@ -380,6 +390,7 @@ export default {
     }
     .submit_btn {
       color: #fff;
+      margin-top: 35px;
       text-align: center;
       font-size: 15px;
       line-height: 42px;

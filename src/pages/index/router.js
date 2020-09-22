@@ -94,7 +94,6 @@ router.beforeEach(async (to, from, next) => {
   /* has no wxid */
   if (!hasWxid) {
     let query = to.query;
-    let route = to.path;
     if (query.wxid) {
       storage.set('wxid', query.wxid);
       storage.set('userinfo', query);
@@ -102,6 +101,7 @@ router.beforeEach(async (to, from, next) => {
     }
     let path = location.origin + location.pathname
     window.location.href = `${baseApi}?r=api/vote/authorize&path=${path}`;
+    return false
   }
 
   // if (hasToken) {

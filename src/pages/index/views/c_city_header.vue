@@ -2,16 +2,18 @@
   <div class="c-city-header">
     <div class="picker_block">
       <img src="@/assets/front/icon_address.png" alt="" />
-      <p class="address" @click="showPicker = true">
+      <p class="address" @click="showCityPicker">
         <span v-if="value">{{ value + '市' }}</span>
         <span v-else>全国</span>
       </p>
     </div>
     <van-popup v-model="showPicker" round position="bottom">
       <van-picker
+        ref="picker"
         title="选择城市"
         show-toolbar
         :columns="columns"
+        @change="onChange"
         @cancel="showPicker = false"
         @confirm="onConfirm"
       />
@@ -20,6 +22,9 @@
     <!-- <img src="@/assets/front/page_title.png" alt="" class="title-bg" /> -->
     <!-- <img src="@/assets/front/logo.png" alt="" class="logo" /> -->
     <!-- <p v-if="showTime" class="time">投票截止时间：{{ time }}</p> -->
+    <!-- 第三方定位 -->
+    <iframe id="geoPage" width=0 height=0 frameborder=0 style="display:none;" scrolling="no"
+      src="https://apis.map.qq.com/tools/geolocation?key=ST4BZ-6N26P-VIKD6-LPJJN-SLMK5-RCFQM&referer=搜搜地图"></iframe>
   </div>
 </template>
 
@@ -41,30 +46,8 @@ export default {
       // time: storage.session('city').limit_time,
       value: '',
       showPicker: false,
-      columns: [
-        {
-          text: '浙江',
-          children: [
-            {
-              text: '杭州',
-            },
-            {
-              text: '温州',
-            },
-          ],
-        },
-        {
-          text: '福建',
-          children: [
-            {
-              text: '福州',
-            },
-            {
-              text: '厦门',
-            },
-          ],
-        },
-      ],
+      defaultIndex: [],
+      columns: [],
     };
   },
   computed: {
@@ -72,6 +55,7 @@ export default {
   },
   async mounted() {
     await this.getCityList()
+    this.getfixCity()
   },
   methods: {
     // 获取城市列表
@@ -79,11 +63,25 @@ export default {
       let { data } = await cityList();
       this.columns = this.formatDate([...data.data])
     },
+    // 显示picker
+    showCityPicker() {
+      this.showPicker = true
+      this.$nextTick(() => {
+        let picker = this.$refs.picker
+        picker.setIndexes(this.defaultIndex)
+      })
+    },
     // picker确定
-    onConfirm(value) {
+    onConfirm(value, index) {
+      // console.log(value, index);
       this.value = value[1];
       this.showPicker = false;
       this.$emit('confimCity', value)
+    },
+    // 监听picker方法
+    onChange(picker, value, index) {
+      // console.log(picker, value, index);
+      let values = picker.getValues()
     },
     // 格式化数据
     formatDate(arr) {
@@ -111,6 +109,34 @@ export default {
         item.children = result[index];
       });
       return newArr
+    },
+    // 获取当前定位
+    getfixCity() {
+      this.sendAddress().then(result => {
+        let province = result.province.split('省')[0]
+        let city = result.city.split('市')[0]
+        if (province && city) {
+          let provinceIndex = this.columns.findIndex(item => item.text == province)
+          let item = this.columns[provinceIndex].children
+          let cityIndex = item.findIndex(item => item.text == city)
+          this.defaultIndex = [provinceIndex, cityIndex]
+          this.value = city
+          this.$emit('confimCity', [province, city])
+        }
+      })
+    },
+    // 第三方获取城市传值
+    async sendAddress() {
+      return new Promise(resolve => {
+        window.addEventListener('message', function (event) {
+          var loc = event.data;
+          try {
+            loc.nation ? resolve(loc) : false
+          } catch (error) {
+            // console.log(error);
+          }
+        }, false);
+      })
     },
   },
 };
