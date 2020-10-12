@@ -1,33 +1,33 @@
 <template>
-  <div class="page detail">
+  <div class="page detail" :style="{height: innerHeight}">
     <div class="header">
-      <img class="avatar" :src="$cdn + info.logo_url" alt="">
+      <img class="avatar" :src="info.image" alt="">
       <div class="name">{{info.name}}</div>
-      <div class="phone">电话: {{info.contact}}</div>
-      <div class="rank">全国排名<span>78</span>位，全市排名<span>7</span>位</div>
+      <div class="phone">电话: {{info.mobile}}</div>
+      <div class="rank">全国排名<span>{{info.whole_rank}}</span>位，全市排名<span>{{info.city_rank}}</span>位</div>
       <div class="fix_block">
         <div class="number">
-          <span>编号：{{info.number}}</span>
+          <span>编号：{{info.id}}</span>
         </div>
         <div class="credit">
-          <span>信用分：{{1073}}</span>
+          <span>信用分：{{info.trust}}</span>
         </div>
       </div>
     </div>
     <!-- <div class="limit-time">投票截止时间：{{ limit_time }}</div> -->
     <div class="content">
       <div class="support_block">
-        <div class="vote_num">当前票数<span>{{info.vote_score}}</span></div>
-        <p class="vote_diff">距离上一名还差<span>{{3084}}</span>票</p>
-        <div class="avatar_block">
+        <div class="vote_num">当前票数<span>{{info.votes}}</span></div>
+        <p class="vote_diff">距离上一名还差<span>{{info.vote_diff}}</span>票</p>
+        <div class="avatar_block" v-if="info.vote_list.length">
           <img src="" alt="">
         </div>
         <div class="vote_btn">支持TA一下</div>
       </div>
-      <div class="group_block">
+      <div class="group_block" v-if="info.group_name">
         <div class="title_block">
           <img src="@/assets/front/group_l.png" alt="">
-          <p>{{'中国平安事业交流群'}}</p>
+          <p>{{info.group_name}}</p>
           <img src="@/assets/front/group_r.png" alt="">
         </div>
         <div class="content_block">
@@ -41,7 +41,7 @@
           <img src="@/assets/front/company_r.png" alt="">
         </div>
         <div class="detail">
-          {{ info.desc }}
+          {{ info.introduction }}
         </div>
       </div>
       <!-- <div class="label-box">
@@ -97,16 +97,23 @@ export default {
         logo_url: 'image/13/13097843b3ae03e767074452b801c526.png',
         contact: 13023367793,
         website: 'http://dt.sousou.com',
-        desc: '这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅'
+        desc: '这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅',
+        vote_list: []
       },
     };
+  },
+  computed: {
+    innerHeight() {
+      return window.innerHeight + 'px'
+    }
   },
   async created() {
     if (!this.id) {
       return;
     }
-    // const { data } = await companyInfo(this.id);
-    // this.info = data;
+    const { data } = await companyInfo(this.id);
+    console.log(data);
+    this.info = data.data;
     // this.$share({
     //   link: this.$route.path,
     //   desc: `快来为${data.name}投票`,
@@ -212,7 +219,7 @@ export default {
       }
       .vote_btn {
         width: 95%;
-        margin: 0 auto;
+        margin: 15px auto 0;
         color: #fff;
         font-size: 16px;
         line-height: 46px;
@@ -285,6 +292,9 @@ export default {
     }
   }
   .statement {
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
     margin: 20px auto 0;
     padding: 8px 0;
     color: #4D7098;

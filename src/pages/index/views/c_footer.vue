@@ -1,14 +1,14 @@
 <template>
   <div class="footer_block">
-    <div
+    <router-link
       :class="[select == index ? 'item on' : 'item']"
       v-for="(item, index) in data"
       :key="index"
-      @click="checkItem(index, item.url)"
+      :to="item.url"
     >
       <img :src="[select == index ? item.icon_on : item.icon]" alt="" />
       <p :class="{ on: select == index }">{{ item.title }}</p>
-    </div>
+    </router-link>
   </div>
 </template>
 
@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     checkItem(index, url) {
-      this.select = index
+      this.select = index;
       this.$router.push(url);
     },
   },
@@ -61,24 +61,25 @@ export default {
   left: 0;
   width: 100%;
   z-index: 99;
-  background: #FDFDFD;
-  border-top: 1px solid #F0F0F0;
+  background: #fdfdfd;
+  border-top: 1px solid #f0f0f0;
   .item {
     flex: 1;
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-direction: column;
-    padding: 5px 0 2px;
+    height: 50px;
     img {
       width: 26px;
       height: 26px;
     }
-    p{
+    p {
       font-size: 12px;
       margin-top: 1px;
-      &.on {
-        font-weight: bold;
-      }
+    }
+    &.router-link-exact-active {
+      font-weight: bold;
     }
   }
 }
