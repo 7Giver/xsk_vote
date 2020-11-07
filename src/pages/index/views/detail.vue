@@ -1,7 +1,9 @@
 <template>
   <div class="page detail" :style="{height: innerHeight}">
     <div class="header">
-      <img class="avatar" :src="info.image" alt="">
+      <div class="avatar">
+        <img :src="info.image" alt="">
+      </div>
       <div class="name">{{info.name}}</div>
       <div class="phone">电话: {{info.mobile}}</div>
       <div class="rank">全国排名<span>{{info.whole_rank}}</span>位，全市排名<span>{{info.city_rank}}</span>位</div>
@@ -20,7 +22,9 @@
         <div class="vote_num">当前票数<span>{{info.votes}}</span></div>
         <p class="vote_diff">距离上一名还差<span>{{info.vote_diff}}</span>票</p>
         <div class="avatar_block" v-if="info.vote_list.length">
-          <img src="" alt="">
+          <div class="item" v-for="(item, index) in info.vote_list" :key="index">
+            <img :src="item.avatar" alt="">
+          </div>
         </div>
         <div class="vote_btn">支持TA一下</div>
       </div>
@@ -100,6 +104,32 @@ export default {
         desc: '这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅这是一段介绍但是房价大幅',
         vote_list: []
       },
+      testlist: [
+        {
+          id: 1,
+          avatar: require('@/assets/front/baidu.png')
+        },
+        {
+          id: 2,
+          avatar: require('@/assets/front/didi.png')
+        },
+        {
+          id: 3,
+          avatar: require('@/assets/front/gaode.png')
+        },
+        {
+          id: 4,
+          avatar: require('@/assets/front/meituan.png')
+        },
+        {
+          id: 5,
+          avatar: require('@/assets/front/tengxun.png')
+        },
+        {
+          id: 6,
+          avatar: require('@/assets/front/more.png')
+        },
+      ]
     };
   },
   computed: {
@@ -114,6 +144,7 @@ export default {
     const { data } = await companyInfo(this.id);
     console.log(data);
     this.info = data.data;
+    this.info.vote_list.push(...this.testlist)
     // this.$share({
     //   link: this.$route.path,
     //   desc: `快来为${data.name}投票`,
@@ -154,6 +185,9 @@ export default {
       padding: 6px;
       border-radius: 4px;
       border: 1px solid rgba(198,211,226, 0.2);
+      img {
+        border-radius: 3px;
+      }
     }
     .name {
       color: #fff;
@@ -215,7 +249,24 @@ export default {
       .avatar_block {
         display: flex;
         align-items: center;
-        margin: 0.2rem auto;
+        justify-content: center;
+        margin: 10px auto;
+        .item {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          overflow: hidden;
+          margin-left: -16px;
+          background: #F2F4F5;
+          img {
+            border-radius: 50%;
+          }
+          &:not(:last-child) {
+            img {
+              border: 5px solid transparent;
+            }
+          }
+        }
       }
       .vote_btn {
         width: 95%;

@@ -111,7 +111,14 @@
     <!-- 投票弹窗 -->
     <van-popup v-model="showVote" :style="{ width: '72%' }">
       <div class="vote_block">
-        <img class="codeimg" src="@/assets/front/more.png" alt="">
+        <div class="title">
+          <p>{{'中国平安家人'}}</p>
+          <p>都在关注的公众号</p>
+        </div>
+        <div class="content">
+          <img class="codeimg" :src="officialCode" alt="">
+          <p>确定要给{{'马明哲丨中国平安董事长'}}投票吗？</p>
+        </div>
         <div class="btn_block">
           <div class="cancel" @click="showVote=false">取消</div>
           <div class="submit" @click="submit">确定</div>
@@ -151,7 +158,7 @@ export default {
   data() {
     return {
       myEntryStatus: '我要报名',
-      officialCode: `${$cdn}image/75/75ce3997414ed655f14fa2eb0b9fce1b.jpg`,
+      officialCode: `${$cdn}image/75/75ce3997414ed655f14fa2eb0b9fce1b.jpg`, //公众号二维码
       loading: true,
       finished: false,
       searchParam: '',
@@ -207,9 +214,9 @@ export default {
     };
   },
   async created() {
-    // this.$nextTick(() => {
-    //   this.showOfficial = true
-    // })
+    this.$nextTick(() => {
+      this.showOfficial = true
+    })
     // this.$dialog.alert({
     //   message: '没有城市信息',
     // });
@@ -638,15 +645,30 @@ export default {
   }
   .vote_block {
     position: relative;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    padding: 40px 0;
+    height: 8rem;
     background: url(~@/assets/front/vote_bg.png) no-repeat center / 100% 100%;
-    .codeimg {
-      width: 80px;
-      height: 80px;
+    .title {
+      text-align: center;
+      padding-top: 20px;
     }
+    .content {
+      position: absolute;
+      left: 50%;
+      top: 54.5%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      text-align: center;
+      .codeimg {
+        width: 130px;
+        height: 130px;
+        margin-bottom: 15px;
+      }
+      > p {
+        color: #FB2D01;
+        font-size: 12px;
+      }
+    }
+    
     .btn_block {
       position: absolute;
       bottom: 0;
